@@ -1,0 +1,29 @@
+{
+  "nota": "Banco de comportamiento del ofrecimiento de patrones (WP-32). Cada caso declara la frase de una persona y el patron que DEBE ofrecerse (null = silencio: sin resonancia el puente calla). Se mide contra los patrones PUBLICADOS del nodo vivo con tests/eval_patrones.py.",
+  "casos": [
+    {"frase": "quiero prestar mi taladro al que lo necesite",
+     "esperado": "préstamo con devolución declarada"},
+    {"frase": "me prestas una escalera? la devuelvo el lunes",
+     "esperado": "préstamo con devolución declarada"},
+    {"frase": "cambio mi bici por una guitarra criolla",
+     "esperado": "trueque declarado"},
+    {"frase": "permuto clases de ingles por arreglos de plomeria",
+     "esperado": "trueque declarado"},
+    {"frase": "organizo una asamblea del barrio todos los domingos",
+     "esperado": "asamblea recurrente con actas vivas"},
+    {"frase": "necesito que alguien acompañe a mi abuela el jueves a la tarde",
+     "esperado": "red de cuidados con ventana declarada"},
+    {"frase": "alguien puede cuidar a mi hijo el viernes a la noche?",
+     "esperado": "red de cuidados con ventana declarada"},
+    {"frase": "hago una olla popular en la plaza el sabado al mediodia",
+     "esperado": "comida comunitaria por cercanía declarada"},
+    {"frase": "abro mi cocina el domingo para almorzar juntos",
+     "esperado": "comida comunitaria por cercanía declarada"},
+    {"frase": "hago una fiesta en el club el sabado y quiero pasar la voz",
+     "esperado": "convocatoria portable"},
+    {"frase": "xilofono cromatico zumbando", "esperado": null},
+    {"frase": "viva la libertad", "esperado": null},
+    {"frase": "busco miel organica de productor local", "esperado": null},
+    {"frase": "vendo pan casero por encargo", "esperado": null}
+  ]
+}

@@ -1,0 +1,237 @@
+services:
+  db:
+    build:
+      context: .
+      dockerfile: postgres/Dockerfile
+    image: rizoma-db:latest
+    container_name: rizoma-db
+    restart: always
+    environment:
+      POSTGRES_USER: rizoma
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Configurar POSTGRES_PASSWORD en .env}
+      POSTGRES_DB: rizoma
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rizoma"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: rizoma-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: rizoma-ollama
+    restart: always
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+      - ./ollama/entrypoint.sh:/entrypoint.sh
+    entrypoint: ["/bin/bash", "/entrypoint.sh"]
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  waku:
+    image: wakuorg/nwaku:v0.32.0
+    container_name: rizoma-waku
+    restart: always
+    ports:
+      - "8645:8645" # REST API
+      - "60000:60000/udp" # P2P Discovery
+    command: >
+      --relay=true
+      --rest=true
+      --rest-address=0.0.0.0
+      --rest-port=8645
+      --log-level=INFO
+      --tcp-port=60000
+      --discv5-discovery=true
+      --discv5-udp-port=9000
+      --store=true
+      --store-message-retention-policy=time:2592000
+
+  api:
+    build:
+      context: ../..
+      dockerfile: infra/docker/python/Dockerfile
+    container_name: rizoma-api
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../..:/app
+    environment:
+      - DATABASE_URL=postgresql://rizoma:${POSTGRES_PASSWORD:?Configurar POSTGRES_PASSWORD en .env}@db:5432/rizoma
+      - REDIS_URL=redis://redis:6379/0
+      - OLLAMA_URL=http://ollama:11434
+      - WAKU_URL=http://waku:8645
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+      waku:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+  # Segundo NODO REAL (antes era un mock): base propia = índice propio y
+  # divergencia real entre lecturas (INV-11). Comparte Ollama (embedder
+  # stateless) y Waku (el océano es UNO; los nodos son muchos). Federación
+  # desde el cliente: RIZOMA_NODOS=http://localhost:8000,http://localhost:8001
+  db-rosario:
+    image: rizoma-db:latest
+    container_name: rizoma-db-rosario
+    restart: always
+    environment:
+      POSTGRES_USER: rizoma
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Configurar POSTGRES_PASSWORD en .env}
+      POSTGRES_DB: rizoma
+    volumes:
+      - postgres_rosario_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rizoma"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api-rosario:
+    build:
+      context: ../..
+      dockerfile: infra/docker/python/Dockerfile
+    container_name: rizoma-api-rosario
+    restart: always
+    command: ["uvicorn", "apps.api.main:app", "--host", "0.0.0.0", "--port", "8001", "--reload", "--reload-dir", "/app"]
+    ports:
+      - "8001:8001"
+    volumes:
+      - ../..:/app
+    environment:
+      - DATABASE_URL=postgresql://rizoma:${POSTGRES_PASSWORD:?Configurar POSTGRES_PASSWORD en .env}@db-rosario:5432/rizoma
+      - REDIS_URL=redis://redis:6379/1
+      - OLLAMA_URL=http://ollama:11434
+      - WAKU_URL=http://waku:8645
+    depends_on:
+      db-rosario:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  worker:
+    build:
+      context: ../..
+      dockerfile: infra/docker/python/Dockerfile
+    container_name: rizoma-worker
+    command: celery -A apps.worker.celery_app worker --loglevel=info
+    volumes:
+      - ../..:/app
+    environment:
+      - DATABASE_URL=postgresql://rizoma:${POSTGRES_PASSWORD:?Configurar POSTGRES_PASSWORD en .env}@db:5432/rizoma
+      - REDIS_URL=redis://redis:6379/0
+      - OLLAMA_URL=http://ollama:11434
+      - WAKU_URL=http://waku:8645
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+      waku:
+        condition: service_started
+
+  ingestor:
+    build:
+      context: ../..
+      dockerfile: infra/docker/python/Dockerfile
+    container_name: rizoma-ingestor
+    command: python3 /app/apps/m1_ingestor/ingestor.py
+    volumes:
+      - ../..:/app
+    environment:
+      - DATABASE_URL=postgresql://rizoma:${POSTGRES_PASSWORD:?Configurar POSTGRES_PASSWORD en .env}@db:5432/rizoma
+      - REDIS_URL=redis://redis:6379/0
+      - OLLAMA_URL=http://rizoma-ollama:11434
+      - WAKU_URL=http://rizoma-waku:8645
+      - PYTHONUNBUFFERED=1
+      - GATEWAY_PRIVATE_KEY=${GATEWAY_PRIVATE_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      waku:
+        condition: service_started
+
+  handshake-worker:
+    build:
+      context: ../..
+      dockerfile: infra/docker/python/Dockerfile
+    container_name: rizoma-handshake
+    command: python3 -m apps.m2_handshake.handshake_worker
+    volumes:
+      - ../..:/app
+    environment:
+      - DATABASE_URL=postgresql://rizoma:${POSTGRES_PASSWORD:?Configurar POSTGRES_PASSWORD en .env}@db:5432/rizoma
+      - REDIS_URL=redis://redis:6379/0
+      - WAKU_URL=http://rizoma-waku:8645
+      - PYTHONUNBUFFERED=1
+      - GATEWAY_PRIVATE_KEY=${GATEWAY_PRIVATE_KEY:-}
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  bot-telegram:
+    build:
+      context: ../..
+      dockerfile: infra/docker/python/Dockerfile
+    container_name: rizoma-bot-telegram
+    command: python3 /app/apps/bot_telegram/main.py
+    volumes:
+      - ../..:/app
+    environment:
+      # El token vive en el .env local (jamas commiteado); Docker lo inyecta.
+      # Sin esta linea el bot no lo veia aunque el .env lo tuviera.
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN:-}
+      - RIZOMA_API_URL=http://api:8000
+      - WAKU_URL=http://waku:8645
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=postgresql://rizoma:${POSTGRES_PASSWORD:?Configurar POSTGRES_PASSWORD en .env}@db:5432/rizoma
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  postgres_rosario_data:
+  ollama_data:

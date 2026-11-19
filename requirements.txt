@@ -1,0 +1,27 @@
+# Versiones verificadas juntas en Python 3.12 para API y servidor MCP.
+fastapi==0.139.0
+uvicorn==0.46.0
+sqlalchemy==2.0.27
+psycopg2-binary==2.9.9
+pgvector==0.2.5
+geoalchemy2==0.14.3
+pydantic==2.13.4
+python-multipart==0.0.9
+redis==5.0.1
+celery==5.3.6
+httpx==0.28.1
+python-dotenv==1.2.2
+python-telegram-bot==21.0.1
+# Concordia conduce por defecto la corrida delegada (06_motor_simulacion §2.1,
+# corrección jul 2026): turnos y memoria en el nodo, razonamiento delegado a
+# la cola. Sin esto el nodo degrada a la engine demo (fallback declarado).
+gdm-concordia==2.4.0
+
+# Firma, cifrado, MCP y cálculo vectorial usados directamente por el código.
+eth-account==0.13.7
+eth-keys==0.7.0
+eth-utils==6.0.0
+hexbytes==1.3.1
+cryptography==47.0.0
+mcp==1.27.0
+numpy==2.4.4

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      window.global = window;
+    </script>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22black%22/><text y=%22.9em%22 font-size=%2280%22 fill=%22white%22 font-family=%22monospace%22 font-weight=%22bold%22>[R]</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RIZOMA_ENGINE v1.0</title>
+    
+    <!-- TAILWIND & FONTS FROM DESIGN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f8acff",
+              "on-primary": "#530c61",
+              "primary-container": "#c075ca",
+              secondary: "#ffb95a",
+              "on-secondary": "#462a00",
+              surface: "#131314",
+              "surface-dim": "#131314",
+              "surface-bright": "#39393a",
+              "surface-container-low": "#1b1b1c",
+              "surface-container": "#1f1f20",
+              "surface-container-high": "#2a2a2b",
+              "surface-container-highest": "#353436",
+              outline: "#9e8b9b",
+              "outline-variant": "#514250",
+              background: "#131314",
+              "on-surface": "#e5e2e3",
+              "on-surface-variant": "#d5c0d2",
+            },
+            spacing: {
+              gutter: "24px",
+              "container-max": "1440px",
+              "margin-mobile": "16px",
+              "margin-desktop": "40px",
+              unit: "4px"
+            },
+            fontFamily: {
+              sans: ["Manrope", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"]
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="bg-background text-on-surface antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

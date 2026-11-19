@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+:root {
+  --bg-color: #131314;
+  --primary: #f8acff;
+  --secondary: #ffb95a;
+  --outline: #9e8b9b;
+  --on-surface: #e5e2e3;
+  --font-main: 'Manrope', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--on-surface);
+  font-family: var(--font-main);
+  font-size: 18px; 
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.noise-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+}
+
+.chat-input {
+  background: #1b1b1c !important; 
+  border: 1px solid #353436 !important;
+  color: #ffffff !important;
+  font-size: 1.1rem !important;
+  padding: 1.2rem !important;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.chat-input::placeholder {
+  color: #555;
+}
+
+.btn-primary {
+  background: var(--primary) !important;
+  color: #530c61 !important;
+  font-size: 1.1rem !important;
+  font-weight: 800 !important;
+  padding: 1.2rem !important;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Fix for small text in cards */
+.liquid-card p {
+  font-size: 1.1rem !important;
+  line-height: 1.6;
+}
+
+.label-mono {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+/* Centering and layout fixes */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 1000px; /* Increased width */
+  margin: 0 auto;
+  position: relative;
+  background: #131314;
+}
+
+nav {
+  background: rgba(19, 19, 20, 0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inner-glow {
+  box-shadow: inset 1px 1px 0px 0px rgba(255, 255, 255, 0.05);
+}
+
+/* Hide number input arrows */
+@keyframes slide {
+  from { background-position: 0 0; }
+  to { background-position: 40px 0; }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}

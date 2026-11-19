@@ -1,0 +1,32 @@
+{
+  "nota": "Catálogo del antagonista de doctrina (WP-30): patrones de confabulación frecuentes de los GMs al explicar Rizoma, con su corrección canónica. Crece con cada playtest que aporte una herejía nueva.",
+  "herejias": [
+    {"id": "nodo-con-cerebro", "patron": "(la |el )?(ia|inteligencia artificial|c[oó]digo generativo|nodo generativo) (del|de los) nodo|el nodo (procesa|propone|genera|abstrae|redacta|decide|interpreta)|la ia de los nodos|nodo.{0,20}(su modelo|su ia)",
+     "correccion": "el nodo no tiene cerebro: embedder ligero, validadores y estado; quien semiotiza es el cliente via MCP"},
+    {"id": "masa-dispara-generacion", "patron": "est[aá]ndar de facto|lo empiezan a usar como est[aá]ndar|(la masa|el uso).{0,40}(dispara|activa|genera|instala)|se (instala|activa) autom[aá]tic",
+     "correccion": "la masa solo mide uso y decae; formalizar es acto humano: proponer, consentir, adoptar"},
+    {"id": "nodo-procesa-personas", "patron": "grandes vol[uú]menes de (interacciones|conversaciones|datos de (la )?gente)|procesa.{0,30}(interacciones|conversaciones) (cruzadas|de la gente|de las personas)",
+     "correccion": "las corridas simulan una comunidad con roles pseudonimizados; el nodo jamas procesa conversaciones reales de la gente"},
+    {"id": "matchmaking-central", "patron": "algoritmo central de (matchmaking|emparejamiento)|servidor central (de|que) (verdad|matchmaking|sentido)|indice central de la verdad",
+     "correccion": "no hay centro: cada nodo sirve su lectura local y la divergencia se muestra, no se resuelve",
+     "solo_afirmativo": true},
+    {"id": "economia-cripto", "patron": "token(s)? (de|como) (recompensa|pago)|se gana(n)? tokens|recompensa econ[oó]mica|criptomoneda|mercado de (tareas|atenci[oó]n|datos)|gig economy",
+     "correccion": "nada paga nada: el peso de contribucion decae, no se transfiere y no es ranking"},
+    {"id": "perfil-oculto", "patron": "perfil (oculto|sombra|de comportamiento)|el nodo (conoce|aprende) (tu|el) (perfil|comportamiento)",
+     "correccion": "lo que el nodo sabe de una llave es visible entero (mapa_ver); no existen perfiles ocultos ni aprendizaje sobre personas"}
+  ],
+  "verdades_requeridas": {
+    "resonancia": [
+      {"id": "lectura-local", "claves": ["local"], "descripcion": "la resonancia es interpretacion local de cada nodo"},
+      {"id": "divergencia", "claves": ["divergencia", "dos versiones", "no resuelve"], "descripcion": "la divergencia entre nodos se muestra, no se resuelve"}
+    ],
+    "lengua": [
+      {"id": "masa-por-uso", "claves": ["masa"], "descripcion": "los comandos ganan masa por uso"},
+      {"id": "olvido", "claves": ["decae", "olvid", "desgramaticaliz"], "descripcion": "sin uso, el comando decae y se olvida"}
+    ],
+    "injertos": [
+      {"id": "cliente-propone", "claves": ["cliente propone", "el cliente cristaliza", "propone el cliente"], "descripcion": "el injerto lo cristaliza un cliente, jamas el nodo"},
+      {"id": "adopcion-residuo", "claves": ["adopci", "residuo"], "descripcion": "la adopcion es el unico residuo colectivo"}
+    ]
+  }
+}

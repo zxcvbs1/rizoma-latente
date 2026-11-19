@@ -1,0 +1,8 @@
+# Runtime Concordia (06_motor_simulacion §2.1; WP-16). Desde jul 2026 es la
+# engine POR DEFECTO de la corrida delegada (ya viene en requirements.txt):
+# Concordia conduce en el nodo y el razonamiento va delegado al cliente MCP
+# (09 §2.6). Sin la librería, la corrida degrada a la engine demo y lo
+# declara en la respuesta (nota_engine). Este archivo queda como pin
+# documentado por separado para instalaciones mínimas que quieran sumarla.
+# Pin verificado: el adaptador está probado contra esta versión exacta.
+gdm-concordia==2.4.0

@@ -1,0 +1,58 @@
+# Configuración de un nodo Rizoma. Copiar a `nodo.toml` y ajustar.
+# Es parte del contrato público del nodo (INV-17: la elección de modelos es
+# declarada). Ver README.md.
+
+[modelos]
+# El embedder ligero corre SIEMPRE en el nodo: vectorización y validadores.
+# El nodo no tiene cerebro; quien semiotiza es el cliente MCP con su modelo.
+embedder = "ollama:nomic-embed-text"
+# Escalón opcional: runtime propio del operador para hospedar corridas.
+# "" o "cliente_mcp" = engine distribuida (default); "stub" = demo; "concordia" =
+# engine centralizada (pip install -r requirements-concordia.txt). El modelo de
+# Concordia puede DELEGARSE al cliente MCP (RuntimeConcordia.con_delegacion): sin
+# clave de API ni LLM local, razona el cliente. Verificado contra la 2.4.0.
+runtime_corridas = ""
+# concordia_pin = "2.4.0"   # fijar la versión al adoptar el escalón Concordia
+
+[simulacion]
+# La corrida delegada (09 §2.6) lanza esta engine por defecto: "concordia"
+# (conducción determinista en el nodo, razonamiento delegado a la cola); sin
+# la librería instalada, el nodo degrada a "demo" (fallback declarado).
+engine_default = "concordia"
+
+[umbrales]
+mapa_minimo_prevision = 5   # aristas antes de que la previsión hable
+n_chico_acervo = 30         # bajo este tamaño de comunidad, revisión humana
+resonancia = 0.70           # arranque piloto; subir con la densidad (umbral de PROPUESTA de sinapsis)
+resonancia_busqueda = 0.66  # piso de coseno para MOSTRAR una coincidencia en /search;
+                            # por debajo, la señal queda sembrada esperando (resonancia
+                            # latente). Elegido por doble barrido: el banco aislado
+                            # (tests/eval_resonancias.py) y el antagonista e2e contra el
+                            # nodo vivo (tests/eval_resonancias_e2e.py): 9/10 aciertos,
+                            # cero falsos, vacio honesto ante lo imposible. Mejor
+                            # huerfana honesta que falso resonante. Se reajusta midiendo.
+                            # Runtime: variable RIZOMA_UMBRAL_BUSQUEDA.
+agentes_max_corrida = 12
+tokens_por_ronda = 0        # 0 = declarar según hardware
+corrida_cara_pedidos = 100  # sobre esto, la corrida delegada entra al gradiente
+                            # propuesta/cubierta/activa (benchmark 2026-07-09:
+                            # minimal ~1 pedido/acto y ~230 tok; basic 4x)
+lector_piso_vectorial = 0.15
+
+[acervo]
+# Gobernanza del consentimiento para publicar formas (piso uniforme aparte).
+consentimiento = "unanimidad"   # unanimidad | mayoria:2/3 | umbral:<n>
+
+[ttl_dias]
+intencion = 30
+reputacion = 30
+propuesta = 7
+waku_store = 30             # olvido físico del transporte
+
+[federacion]
+# Lista propia del nodo/cliente (texto plano, compartible). Sin registro central.
+nodos = []
+
+[derivacion]
+# Recursos humanos locales del territorio para la contención (02_sujeto §8).
+vias = []

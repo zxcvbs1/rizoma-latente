@@ -1,0 +1,61 @@
+# Archivo privado: notas, tesis, PDFs, bibliografía, diseños y código retirado.
+/_local/
+
+# Secretos, identidad y configuración propia (también copias temporales).
+.env
+.env.*
+*.env
+.envrc
+!.env.example
+user_keys.json*
+*.key
+*.pem
+*.p12
+*.pfx
+nodo.toml
+.aws/
+.codex/
+.agents/
+.claude/
+.npmrc
+.netrc
+
+# Datos locales y volcados; no son código fuente.
+*.db
+*.db-*
+*.db3*
+*.sqlite*
+/*.sql
+*.dump
+*.log
+*.pid
+postgres_data/
+postgres_rosario_data/
+ollama_data/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+
+# Node y frontend
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.tsbuildinfo
+coverage/
+
+# Editores y sistema
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo

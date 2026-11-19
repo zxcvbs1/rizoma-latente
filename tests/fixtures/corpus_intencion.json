@@ -1,0 +1,21 @@
+{
+  "nota": "Banco del lector de intención del puente (WP-31): frases naturales con el comando esperado; null = deseo puro (sin comando). Se corre con tests/eval_intencion.py contra el embedder real.",
+  "casos": [
+    {"texto": "solicito integrantes para un coro", "esperado": "busco"},
+    {"texto": "necesito una escalera para el fin de semana", "esperado": "busco"},
+    {"texto": "ando necesitando quien me corte el pasto", "esperado": "busco"},
+    {"texto": "alguien que sepa arreglar una canilla?", "esperado": "busco"},
+    {"texto": "me hace falta una mano con una mudanza", "esperado": "busco"},
+    {"texto": "regalo cachorros hermosos", "esperado": "ofrezco"},
+    {"texto": "encontre una perrita en la plaza, la cuido hasta que aparezca el duenio", "esperado": "ofrezco"},
+    {"texto": "tengo frascos de vidrio para quien los quiera", "esperado": "ofrezco"},
+    {"texto": "doy clases de guitarra", "esperado": "ofrezco"},
+    {"texto": "se coser y puedo ayudar con arreglos", "esperado": "ofrezco"},
+    {"texto": "armo una juntada para limpiar la ribera el sabado", "esperado": "organizo"},
+    {"texto": "convoco vecinos para la feria del barrio", "esperado": "organizo"},
+    {"texto": "cambio mi bici por una guitarra", "esperado": "permuto"},
+    {"texto": "viva la libertad", "esperado": null},
+    {"texto": "vivo en todos lados", "esperado": null},
+    {"texto": "que dia tan raro", "esperado": null}
+  ]
+}
